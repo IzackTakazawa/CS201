@@ -439,3 +439,67 @@ Let's say the only way to get the penguins data was via the uri. At the top of t
 2.  How many penguins live on Torgersen Island?
 3.  Create a dataframe that has the average culmen depth for each species
     1.  Make a bar plot of the new dataframe with species on the x axis and average culmen depth on the y axis
+
+1\)
+
+-   Create a boxplot of body mass by species & make the plot interactive
+
+    1.  Hint: geom_boxplot(), ggplotly()
+
+```{r}
+interactive_box_plot <-ggplot(data = penguins_data_from_csv, aes(x = species, y = body_mass_g, fill = species)) +
+  geom_boxplot() +
+  theme_bw() +
+  scale_color_viridis_d() +
+   labs(title = "Palmer Penguins Body Mass by Species",
+       subtitle = "3 penguin species observed on three islands in the Palmer Archipelago, Antarctica",
+       x = "Species",
+       y = "Body Mass (g)")
+
+```
+
+-   
+
+    ```{r}
+    ggplotly(interactive_box_plot)
+    ```
+
+2\)
+
+-   How many penguins live on Torgersen Island?
+
+    ```{r}
+    table(penguins_data_from_csv$island)
+    ```
+
+Answer: 52 penguins live on Torgersen island
+
+3\)
+
+-   Create a dataframe that has the average culmen depth for each species
+
+    1.  Make a bar plot of the new dataframe with species on the x axis and average culmen depth on the y axis
+
+    ```{r}
+    average_species_culmen_depth <- penguins_data_from_csv %>% 
+      group_by(species) %>% 
+      summarise(average_species_culmen_depth = mean(culmen_depth_mm, na.rm = TRUE))
+
+    ```
+
+-   <div>
+
+    ```{r}
+    ggplot(data = average_species_culmen_depth, aes(x = species, y = average_species_culmen_depth, fill = species)) +
+      geom_bar(stat = "identity") +
+      theme_bw() +
+      scale_fill_viridis_d() +
+      coord_flip() +
+      theme(legend.position = "none") +
+      labs(title = "Palmer Penguins, Average Culmen Depth by Species",
+           subtitle = "3 penguin species observed on three islands in the Palmer Archipelago, Antarctica",
+           x = "species",
+           y = "average culmen depth (mm)")
+    ```
+
+    </div>
