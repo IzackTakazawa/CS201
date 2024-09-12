@@ -1,0 +1,47 @@
+---
+title: "DPLYR penguins"
+format: html
+editor: visual
+---
+
+```{r}
+library(tidyverse)
+library(palmerpenguins)
+library(here)
+```
+
+```{r}
+penguins <- read_csv(here("data/penguins_lter.csv"))
+```
+
+## 3. Filter()
+
+control + alt + i = make new code chunk
+
+####  **Practice Activity 1**
+
+Use `filter()` to create a subset from `penguins` that only contains gentoo penguins with a bill depth greater than or equal to 15.5 millimeters.
+
+```{r}
+penguins %>%
+  filter(Species == "Gentoo", bill_depth_mm >= 15.5)
+```
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
