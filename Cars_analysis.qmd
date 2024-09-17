@@ -1,0 +1,34 @@
+---
+title: "Car Analysis"
+format: html
+editor: visual
+---
+
+## Load in Libraries
+
+```{r}
+library(tidyverse)
+library(plotly)
+```
+
+# Read in Dataset
+
+```{r}
+mtcars <- datasets::mtcars
+```
+
+```{r}
+?mtcars
+```
+
+Lets examine the relationship between weight and miles per gallon
+
+```{r}
+cars_wt_mpg <- ggplot(data = mtcars, aes(x = mpg, y = wt, point = model, color = hp)) +
+  geom_point()
+cars_wt_mpg
+```
+
+```{r}
+ggplotly(cars_wt_mpg)
+```
