@@ -1,0 +1,52 @@
+---
+title: "SDG Analytics"
+format: html
+editor: visual
+---
+
+# Loading Libraries
+
+```{r}
+library(tidyverse)
+library(here)
+library(janitor)
+library(plotly)
+```
+
+### Read in SDG Data
+
+```{r}
+sdg_data <- read_csv(here("data/SDR-2023-Data.csv"))
+```
+
+Clean Column Names
+
+```{r}
+sdg_data <- sdg_data %>%
+  clean_names()
+```
+
+Bar Chart of SDG Scores for each country by region
+
+```{r}
+ggplot(data = sdg_data, aes(y = country, x = x2023_sdg_index_score)) +
+  geom_bar(stat = "identity") +
+  facet_wrap(~regions_used_for_the_sdr, scales = "free")
+  
+```
+
+Challenge.
+
+Create a scatter plot that has a goal score on x and y axis
+
+```{r}
+goal_1_4_cor <- ggplot(data = sdg_data, aes(y = goal_1_score, x = goal_4_score)) +
+  geom_point() +
+  geom_smooth() +
+  stat_cor()
+goal_1_4_cor
+```
+
+```{r}
+ggplotly(goal_1_4_cor)
+```
