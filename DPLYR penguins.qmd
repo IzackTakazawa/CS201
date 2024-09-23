@@ -178,7 +178,7 @@ penguins %>%
 
 ## 6. Rename()
 
-####  **Practice Activity 1**
+#### **Practice Activity 1**
 
 Starting with `penguins`, rename the `flipper_length_mm` column to `flipper_mm`
 
@@ -187,7 +187,7 @@ penguins %>%
   rename(flipper_mm = flipper_length_mm)
 ```
 
-####  **Practice Activity 2**
+#### **Practice Activity 2**
 
 Starting with `penguins`, rename the `island` column to `island_name` and the `species` column to `penguin_spp`.
 
@@ -196,7 +196,7 @@ penguins %>%
   rename(island_name = island, penguin_spp = species)
 ```
 
-####  **Practice Activity 3**
+#### **Practice Activity 3**
 
 Starting with `penguins`, convert any column names that start with “bill” to upper case.
 
@@ -207,7 +207,7 @@ penguins %>%
 
 ## 6. Mutate()
 
-####  **Practice Activity 1**
+#### **Practice Activity 1**
 
 Add a column to `penguins` that contains a new column `flipper_m`, which is the `flipper_length_mm` (flipper length in millimeters) converted to units of meters.
 
@@ -216,7 +216,7 @@ penguins %>%
   mutate(flipper_m = flipper_length_mm / 1000)
 ```
 
-####  **Practice Activity 2**
+#### **Practice Activity 2**
 
 The `year` column in `penguins` is currently an integer. Add a new column named `year_fct` that is the year converted to a factor (hint: `as.factor()`).
 
@@ -225,7 +225,7 @@ penguins %>%
   mutate(year_fct = as.factor(year))
 ```
 
-####  **Practice Activity 3**
+#### **Practice Activity 3**
 
 To `penguins`, add a new column `mass_lb` that contains penguin body mass, currently in grams, converted to pounds (1 gram = 0.0022 lb).
 
@@ -234,7 +234,7 @@ penguins %>%
   mutate(mass_1b = body_mass_g * 0.0022)
 ```
 
-####  **Practice Activity 4**
+#### **Practice Activity 4**
 
 Starting with `penguins`, do the following within a single `mutate()` function:
 
@@ -253,7 +253,7 @@ penguins %>%
 
 ### **8. Group_by & Summarize()**
 
-####  **Practice Activity 1**
+#### **Practice Activity 1**
 
 Starting with `penguins`, create a summary table containing the maximum and minimum length of flippers (call the columns `flip_max` and `flip_min`) for chinstrap penguins, grouped by island.
 
@@ -265,7 +265,7 @@ penguins %>%
             flip_min = min(flipper_length_mm, na.rm = TRUE))
 ```
 
-####  **Practice Activity 2**
+#### **Practice Activity 2**
 
 Starting with `penguins`, group the data by species and year, then create a summary table containing the mean bill depth (call this `bill_depth_mean`) and mean bill length (call this `bill_length_mean`) for each group.
 
@@ -280,7 +280,7 @@ penguins %>%
 
 ```
 
-####  **Practice Activity 3**
+#### **Practice Activity 3**
 
 Starting with `penguins`, in a piped sequence:
 
@@ -300,9 +300,9 @@ penguins %>%
 
 ```
 
-###  **9. Across()**
+### **9. Across()**
 
-####  **Practice Activity 1**
+#### **Practice Activity 1**
 
 Starting with `penguins`, group data by island then use `across()` to find the median value of groups for any columns containing the string “mm”. The names in the resulting table should be the original column name followed by an underscore, then the word “median” (e.g. colname_median).
 
@@ -312,7 +312,7 @@ penguins %>%
   summarize(across(ends_with("mm"), mean, na.rm = TRUE))
 ```
 
-####  **Practice Activity 2**
+#### **Practice Activity 2**
 
 Starting with `penguins`, only keep observations for Adelie penguins, then use `across()` to find the maximum value for any numeric variable (hint: `where(is.numeric)`) for each island (i.e. group by island).
 
@@ -324,7 +324,7 @@ penguins %>%
 
 ```
 
-####  **Practice Activity 3**
+#### **Practice Activity 3**
 
 Starting from `penguins`, write a piped sequence to:
 
@@ -359,7 +359,7 @@ penguins %>%
   count(species, island, year)
 ```
 
-####  **Practice Activity 2**
+#### **Practice Activity 2**
 
 Starting with `penguins`, filter to only keep Adelie and gentoo penguins, then find counts by species and sex.
 
@@ -372,7 +372,7 @@ penguins %>%
 
 ### 11. Case_when()
 
-####  **Practice Activity 1**
+#### **Practice Activity 1**
 
 Add a new column to `penguins` called `study_year` that contains:
 
@@ -391,7 +391,7 @@ penguins %>%
   ))
 ```
 
-####  **Practice Activity 2**
+#### **Practice Activity 2**
 
 Starting with `penguins`, only keep observations for chinstrap penguins, then only keep the `flipper_length_mm` and `body_mass_g` variables. Add a new column called `fm_ratio` that contains the ratio of flipper length to body mass for each penguin. Next, add another column named `ratio_bin` which contains the word “high” if `fm_ratio` is greater than or equal to 0.05, “low” if the ratio is less than 0.05, and “no record” if anything else (e.g. `NA`).
 
