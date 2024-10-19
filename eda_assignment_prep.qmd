@@ -81,23 +81,26 @@ library(janitor)
 ### Data
 
 ```{r}
+mets_pitching <- read_csv(here("data/NYM_pitching.csv"))
 
+mets_pitching <- mets_pitching %>%
+  clean_names()
 ```
 
 ### Describe the data:
 
-Data author:
+Data author: Matt OP
 
-Description:
+Description: New York Mets pitching data from 1962 - 2023
 
-How many observations (rows) are there?
+How many observations (rows) are there? 1,296
 
-How many variables (columns) are there?
+How many variables (columns) are there? 37
 
 ### Summary: Quick overview
 
 ```{r}
-
+summary(mets_pitching)
 ```
 
 ### Categorical vs. Continuous
@@ -106,8 +109,10 @@ How many variables (columns) are there?
 
 ```
 
-How many categorical variables are there?
+How many categorical variables are there? 7
 
-How many continuous variables are there?
+How many continuous variables are there? 30
 
-What are some variables of interest to you?
+What are some variables of interest to you? ranked, ERA, innings pitched, walks, strikeouts, strikeout to walk ratio
+
+What kinds of questions could you explore with this data? In a given year who was the #1 ranked pitcher and what was there ERA, IP, BB, K, K/BB.
