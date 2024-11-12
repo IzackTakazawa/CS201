@@ -7,6 +7,7 @@ editor: visual
 ### Load Libraries
 
 ```{r, message=FALSE, warning=FALSE}
+library(plotly)
 library(tidyverse)
 library(here)
 library(arrow)
@@ -48,7 +49,7 @@ Reading in feather files with `arrow`
 -   Reason for Discharge
 
 ```{r}
-# teds_d_select <- teds_d %>% 
+#teds_d_select <- teds_d %>% 
 #   select(freq1_d, stfips, services_d, los, reason)
 ```
 
@@ -309,3 +310,109 @@ interactive_no_use_discharge_map
 ```
 
 1.  How does the percentage of treatments being completed & percentage of treatments ending with no use vary by the service and length of stay. Create at least 3 visualizations to try and answer this question
+
+```{r}
+no_use_by_services <- teds_d_select %>%
+  group_by(services_d) %>%
+  summarize(
+    total_cases = n(),
+    completed_cases = sum(reason == "completed", na.rm = TRUE),
+    completed_no_use_discharge = sum(freq1_d == "no use" & reason == "completed", na.rm = TRUE)
+  ) %>%
+  mutate(percentage_no_use = (completed_no_use_discharge / completed_cases) * 100) %>%
+  mutate(percentage_completed = (completed_cases / total_cases) * 100)
+```
+
+```{r}
+ggplot(data = no_use_by_services, aes(x = services_d, y = percentage_no_use)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Percentage of Cases Resulting in No Use by Services", x = "Services", y = "Percent No Use at Discharge") +
+  theme_minimal() +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+```{r}
+ggplot(data = no_use_by_services, aes(x = services_d, y = percentage_completed)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Percentage of Cases Completed by Services", x = "Services", y = "Percent of Cases Completed") +
+  theme_minimal() +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+# Reshape the data to long format
+no_use_by_services_long <- no_use_by_services %>%
+  pivot_longer(cols = c(percentage_no_use, percentage_completed),
+               names_to = "Outcome",
+               values_to = "Percentage")
+
+# Create the combined plot
+combined_plot_services <- ggplot(data = no_use_by_services_long, aes(x = services_d, y = Percentage, fill = Outcome)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Percentage of Cases by Services",
+       x = "Services",
+       y = "Percentage") +
+  theme_minimal() +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_fill_manual(values = c("skyblue", "salmon")) +   # Customize bar colors
+  scale_color_manual(values = c("blue", "red"))          # Customize line colors
+
+# Display the plot
+print(combined_plot_services)
+
+```
+
+```{r}
+no_use_by_los <- teds_d_select %>%
+  group_by(los) %>%
+  summarize(
+    total_cases = n(),
+    completed_cases = sum(reason == "completed", na.rm = TRUE),
+    completed_no_use_discharge = sum(freq1_d == "no use" & reason == "completed", na.rm = TRUE)
+  ) %>%
+  mutate(percentage_no_use = (completed_no_use_discharge / completed_cases) * 100) %>%
+  mutate(percentage_completed = (completed_cases / total_cases) * 100)
+```
+
+```{r}
+
+ggplot(data = no_use_by_los, aes(x = los, y = percentage_completed)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Percentage of Cases Completed by Length of Stay", x = "Length of Stay", y = "Percent of Cases Completed") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+ggplot(data = no_use_by_los, aes(x = los, y = percentage_no_use)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Percentage of Cases Resulting in No Use by Length of Stay", x = "Length of Stay", y = "Percent No Use at Discharge") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+# Reshape the data to long format
+no_use_by_los_long <- no_use_by_los %>%
+  pivot_longer(cols = c(percentage_no_use, percentage_completed),
+               names_to = "Outcome",
+               values_to = "Percentage")
+
+# Create the combined plot
+combined_plot_los <- ggplot(data = no_use_by_los_long, aes(x = los, y = Percentage, fill = Outcome)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Percentage of Cases by Length of Stay",
+       x = "Length of Stay",
+       y = "Percentage") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_fill_manual(values = c("skyblue", "salmon")) +   # Customize bar colors
+  scale_color_manual(values = c("blue", "red"))          # Customize line colors
+
+# Display the plot
+print(combined_plot_los)
+```
