@@ -8,9 +8,30 @@ editor: visual
 
 You've looked at different types of data, conducted exploratory data analysis, manipulated data with dplyr and other tidy methods, created maps.... Now it's time to think about your flexdashboard final project!
 
+```{r}
+library(here)
+library(tidyverse)
+library(janitor)
+```
+
 ## Data
 
 What data are you planning to use? Describe the data here and read it in below.
+
+Data author: Matt OP
+
+Description: New York Mets pitching data from 1962 - 2023
+
+How many observations (rows) are there? 1,296
+
+How many variables (columns) are there? 37
+
+```{r}
+pitching <- read_csv(here("data/NYM_pitching.csv"))
+
+pitching <- pitching %>%
+  clean_names()
+```
 
 ```{r}
 
@@ -21,8 +42,16 @@ What data are you planning to use? Describe the data here and read it in below.
 Which variables are interesting to you? What kinds of questions will you be asking as you look into this data? What story is your data telling? Please include three questions here. The code chunk below is optional.
 
 ```{r}
-
+summary(pitching)
 ```
+
+What are some variables of interest to you?
+
+-   ranked, ERA, innings pitched, walks, strikeouts, strikeout to walk ratio
+
+What kinds of questions could you explore with this data?
+
+-   In a given year who was the #1 ranked pitcher and what was there ERA, IP, BB, K, K/BB.
 
 ## Plots
 
