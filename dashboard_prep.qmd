@@ -51,7 +51,9 @@ What are some variables of interest to you?
 
 What kinds of questions could you explore with this data?
 
--   In a given year who was the #1 ranked pitcher and what was there ERA, IP, BB, K, K/BB.
+-   In a given year who was the #1 ranked pitcher and what was there ERA, IP, BB, K, K/BB?
+-   As a pitching staff, who had the best season as a whole looking at ERA, BB, K, H, R, etc?
+-   Is Jacob Degrom considered one of the best pitchers to come out of the Met's organization?
 
 ## Plots
 
@@ -59,8 +61,81 @@ You can present plots as "answers" to your exploratory questions above. You'll n
 
 These can look really basic right now. We'll talk more about themes and layers next week.
 
-```{r}
+1\) In a given year who was the #1 ranked pitcher and what was there ERA, IP, BB, K, K/BB?
 
+```{r}
+qualified_pitchers <- pitching %>%
+  filter(innings_pitched >= 30) %>%
+  filter(earned_run_average <= 3.00)
+
+top_pitcher <- qualified_pitchers %>%
+  filter(earned_run_average == min(earned_run_average, na.rm = TRUE)) %>%
+  slice(1) 
+# In case of ties, take the first one
+
+# Select relevant statistics to plot
+pitcher_stats <- top_pitcher %>%
+  select(name, earned_run_average, games_played, innings_pitched, walks_allowed, strikeouts) %>%
+  pivot_longer(-name, names_to = "stat", values_to = "value")
+
+# Plot the stats
+ggplot(pitcher_stats, aes(x = stat, y = value, fill = stat)) +
+  geom_col(show.legend = FALSE) +
+  labs(
+    title = paste("Performance of", top_pitcher$name),
+    x = "Statistic",
+    y = "Value"
+  ) +
+  theme_minimal()
+```
+
+2\) As a pitching staff, who had the best season as a whole looking at ERA, BB, K, H, R, etc?
+
+```{r}
+qualified_pitching_staff <- pitching %>%
+  filter(earned_run_average <= 8.00)
+
+top_pitching_staff <- qualified_pitching_staff %>%
+  filter(earned_run_average == min(earned_run_average, na.rm = TRUE)) %>%
+  slice(1) 
+# In case of ties, take the first one
+
+# Select relevant statistics to plot
+top_pitching_staff <- qualified_pitching_staff %>%
+  select(year, earned_run_average, games_played, innings_pitched, walks_allowed, strikeouts) %>%
+  pivot_longer(-year, names_to = "stat", values_to = "value")
+
+# Plot the stats
+ggplot(top_pitching_staff, aes(x = stat, y = value, fill = stat)) +
+  geom_col(show.legend = FALSE) +
+  labs(
+    title = paste("Performance of", top_pitching_staff$year),
+    x = "Statistic",
+    y = "Value"
+  ) +
+  theme_minimal()
+```
+
+3\) Is Jacob Degrom considered one of the best pitchers to come out of the Met's organization?
+
+```{r}
+jacob_degrom <- pitching %>%
+  filter(name == "Jacob deGrom")
+
+# Select relevant statistics to plot
+pitcher_stats <- jacob_degrom %>%
+  select(name, earned_run_average, games_played, innings_pitched, walks_allowed, strikeouts) %>%
+  pivot_longer(-name, names_to = "stat", values_to = "value")
+
+# Plot the stats
+ggplot(pitcher_stats, aes(x = stat, y = value, fill = stat)) +
+  geom_col(show.legend = FALSE) +
+  labs(
+    title = paste("Performance of Jacob deGrom"),
+    x = "Statistic",
+    y = "Value"
+  ) +
+  theme_minimal()
 ```
 
 ## flexdashboards
@@ -73,4 +148,8 @@ Please make sure you include space for at least three plots and at least one des
 
 What projects have you found that look nice/doable?
 
+I like the Shiny: Neighborhood diversity example dashboard, but am unsure if I will be able to do it because it is using shiny
+
 What layout(s) do you think you want to apply?
+
+As for the layout I like the tabsets because you can toggle back and forth between two large plots
